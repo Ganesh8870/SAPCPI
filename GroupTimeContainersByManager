@@ -1,0 +1,42 @@
+import com.sap.gateway.ip.core.customdev.util.Message
+import groovy.xml.*
+
+Message processData(Message message) {
+    def body = message.getBody(String)
+    def inputXml = new XmlParser().parseText(body)
+
+    // Map to hold managerEmail => list of TimeContainer nodes
+    def groupedByManagerEmail = [:]
+
+    inputXml.TimeContainer.each { node ->
+        def emailNode = node.'userIdNav'?.'User'?.'empInfo'?.'EmpEmployment'?.'jobInfoNav'?.'EmpJob'?.'managerUserNav'?.'User'?.'email'
+        def managerEmail = emailNode?.text()
+
+        if (managerEmail) {
+            if (!groupedByManagerEmail.containsKey(managerEmail)) {
+                groupedByManagerEmail[managerEmail] = []
+            }
+            groupedByManagerEmail[managerEmail] << node
+        }
+    }
+
+    // Build the new grouped XML structure
+    def resultRoot = new Node(null, 'TimeContainer')
+
+    groupedByManagerEmail.each { managerEmail, timeNodes ->
+        def rootNode = resultRoot.appendNode('Root')
+
+        timeNodes.each { originalNode ->
+            // Deep copy using XmlUtil to avoid mutation issues
+            def deepCopy = new XmlParser().parseText(XmlUtil.serialize(originalNode))
+            rootNode.append(deepCopy)
+        }
+    }
+
+    // Convert final structure to minified XML string
+    def rawXml = XmlUtil.serialize(resultRoot)
+    def minifiedXml = rawXml.replaceAll(">\\s+<", "><").trim()
+
+    message.setBody(minifiedXml)
+    return message
+}
