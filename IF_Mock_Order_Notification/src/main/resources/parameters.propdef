@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><parameters><parameter>
+    <key/>
+    <name>SND_Mock_Address</name>
+    <type>xsd:string</type>
+    <isRequired>false</isRequired>
+    <constraint/>
+    <description/>
+    <additionalMetadata/>
+  </parameter><parameter>
+    <key/>
+    <name>REC_Mock_Address</name>
+    <type>xsd:string</type>
+    <isRequired>false</isRequired>
+    <constraint/>
+    <description/>
+    <additionalMetadata/>
+  </parameter><param_references><reference attribute_category="SND_Mock" attribute_id="/attrId::urlPath" attribute_uilabel="" param_key="SND_Mock_Address"/><reference attribute_category="Default_Mock" attribute_id="ctype::AdapterVariant/cname::HTTP/tp::HTTP/mp::None/direction::Receiver/version::1.20.1/attrId::httpAddressWithoutQuery" attribute_uilabel="Address" param_key="REC_Mock_Address"/><reference attribute_category="Mock" attribute_id="ctype::AdapterVariant/cname::HTTP/tp::HTTP/mp::None/direction::Receiver/version::1.20.1/attrId::httpAddressWithoutQuery" attribute_uilabel="Address" param_key="REC_Mock_Address"/></param_references></parameters>
